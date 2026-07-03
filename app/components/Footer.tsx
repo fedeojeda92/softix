@@ -1,89 +1,124 @@
 "use client";
 
-const QUICK_LINKS = [
-  { label: "Home", href: "#" },
-  { label: "Nosotros", href: "#sobre-nosotros" },
-  { label: "Servicios", href: "#servicios" },
-  { label: "Planes", href: "#planes" },
-  { label: "Contacto", href: "#contacto" },
-];
+import { motion } from "framer-motion";
+import { useLang } from "../lib/LanguageContext";
 
-const WHATSAPP_LINK = "https://wa.me/549XXXXXXXXXX";
+const WHATSAPP_LINK = "https://wa.me/5491159568286?text=Hola%2C%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20sus%20servicios.";
 const INSTAGRAM_LINK = "https://instagram.com/";
 
+const QUICK_LINKS = [
+  { key: "nav.home", href: "#" },
+  { key: "nav.nosotros", href: "#sobre-nosotros" },
+  { key: "nav.servicios", href: "#servicios" },
+  { key: "nav.planes", href: "#planes" },
+  { key: "nav.contacto", href: "#contacto" },
+];
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 15 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+};
+
 export default function Footer() {
+  const { t } = useLang();
+
   return (
     <footer className="bg-bg-dark pt-16 pb-8">
-      <div className="mx-auto max-w-6xl px-6 lg:px-10">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-50px" }}
+        className="mx-auto max-w-6xl px-6 lg:px-10"
+      >
         <div className="grid gap-12 md:grid-cols-3 md:gap-8">
-          {/* Logo */}
-          <div>
+          <motion.div variants={itemVariants}>
             <a href="#" className="font-display text-xl font-semibold text-white">
               Softix
             </a>
             <p className="mt-3 max-w-xs font-body text-sm leading-relaxed text-white/40">
-              Software, contenido y gestión integral para inmobiliarias y agentes.
+              {t("footer.desc")}
             </p>
-          </div>
+          </motion.div>
 
-          {/* Quick links */}
-          <div>
+          <motion.div variants={itemVariants}>
             <h4 className="mb-4 font-body text-xs font-semibold uppercase tracking-[0.15em] text-white/60">
-              Navegación
+              {t("footer.nav")}
             </h4>
             <ul className="flex flex-col gap-2.5">
               {QUICK_LINKS.map((link) => (
-                <li key={link.label}>
-                  <a
+                <li key={link.key}>
+                  <motion.a
                     href={link.href}
-                    className="font-body text-sm text-white/40 transition-colors hover:text-white"
+                    whileHover={{ x: 4 }}
+                    whileTap={{ scale: 0.97 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                    className="inline-block font-body text-sm text-white/40 transition-colors hover:text-white"
                   >
-                    {link.label}
-                  </a>
+                    {t(link.key)}
+                  </motion.a>
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
-          {/* Social */}
-          <div>
+          <motion.div variants={itemVariants}>
             <h4 className="mb-4 font-body text-xs font-semibold uppercase tracking-[0.15em] text-white/60">
-              Seguinos
+              {t("footer.follow")}
             </h4>
             <div className="flex gap-3">
-              <a
+              <motion.a
                 href={INSTAGRAM_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
+                whileHover={{ scale: 1.1, rotate: 5 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 15 }}
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-white/40 transition-colors hover:border-white/30 hover:text-white"
               >
                 <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
                   <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
                 </svg>
-              </a>
-              <a
+              </motion.a>
+              <motion.a
                 href={WHATSAPP_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"
+                whileHover={{ scale: 1.1, rotate: -5 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 15 }}
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-white/40 transition-colors hover:border-white/30 hover:text-white"
               >
                 <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
                   <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
                 </svg>
-              </a>
+              </motion.a>
             </div>
-          </div>
+          </motion.div>
         </div>
 
-        {/* Divider */}
-        <div className="mt-12 border-t border-white/10 pt-6">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="mt-12 border-t border-white/10 pt-6"
+        >
           <p className="text-center font-body text-xs text-white/30">
-            &copy; {new Date().getFullYear()} Softix. Todos los derechos reservados.
+            &copy; {new Date().getFullYear()} Softix. {t("footer.rights")}
           </p>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </footer>
   );
 }

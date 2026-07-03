@@ -1,106 +1,186 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Globe, Workflow, Camera, TrendingUp, Sparkles } from "lucide-react";
+import { useLang } from "../lib/LanguageContext";
 
 const SERVICES = [
   {
     icon: Globe,
-    title: "Sitio web a medida",
-    description:
-      "Desarrollo de tu sitio con optimización para buscadores (SEO), soporte y actualización permanente, disponible en varios idiomas.",
+    titleKey: "services.s1.title",
+    descKey: "services.s1.desc",
+    span: "col-span-1 row-span-2",
+    iconBg: "bg-forest/10",
+    iconColor: "text-forest",
   },
   {
     icon: Workflow,
-    title: "Automatización y CRM",
-    description:
-      "Gestión de leads y automatizaciones a medida del sector inmobiliario, integradas a tu flujo de trabajo diario.",
+    titleKey: "services.s2.title",
+    descKey: "services.s2.desc",
+    span: "col-span-1 row-span-1",
+    iconBg: "bg-bronze/10",
+    iconColor: "text-bronze",
   },
   {
     icon: Camera,
-    title: "Contenido multimedia integral",
-    description:
-      "Fotografía e iluminación profesional, imágenes interactivas en 360°, video con drone en 4K, edición e implementación lista para web y redes.",
+    titleKey: "services.s3.title",
+    descKey: "services.s3.desc",
+    span: "col-span-1 row-span-1",
+    iconBg: "bg-forest/10",
+    iconColor: "text-forest",
   },
   {
     icon: TrendingUp,
-    title: "Marketing digital inmobiliario",
-    description:
-      "Gestión de Google Ads y Meta Ads, con estrategia especializada en el sector inmobiliario.",
+    titleKey: "services.s4.title",
+    descKey: "services.s4.desc",
+    span: "col-span-1 row-span-1",
+    iconBg: "bg-bronze/10",
+    iconColor: "text-bronze",
   },
   {
     icon: Sparkles,
-    title: "Styling previo a la sesión",
-    description:
-      "Preparación y acondicionamiento de la propiedad antes de la sesión, para que cada imagen luzca en su mejor versión.",
-    badge: "Complementario",
+    titleKey: "services.s5.title",
+    descKey: "services.s5.desc",
+    badgeKey: "services.s5.badge",
+    span: "col-span-1 row-span-1",
+    iconBg: "bg-forest/10",
+    iconColor: "text-forest",
   },
 ];
 
-const container = {
-  hidden: {},
-  show: {
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
+function ServiceCard({
+  service,
+  index,
+}: {
+  service: (typeof SERVICES)[number];
+  index: number;
+}) {
+  const { t } = useLang();
 
-const item = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
-};
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{
+        delay: index * 0.1,
+        duration: 0.6,
+        ease: [0.25, 0.46, 0.45, 0.94],
+      }}
+      whileHover={{ y: -6, scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      className={`group relative overflow-hidden rounded-2xl border border-line/50 bg-bg p-6 transition-all duration-500 hover:border-forest/30 hover:shadow-2xl hover:shadow-forest/5 sm:p-8 ${service.span}`}
+    >
+      {/* Background gradient on hover */}
+      <div className="absolute inset-0 bg-gradient-to-br from-forest/0 via-transparent to-bronze/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+      {/* Icon */}
+      <div className="relative mb-5">
+        <motion.div
+          whileHover={{ rotate: 5, scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          transition={{ type: "spring", stiffness: 400, damping: 15 }}
+          className={`flex h-14 w-14 items-center justify-center rounded-2xl ${service.iconBg} ${service.iconColor} transition-all duration-300 group-hover:shadow-lg`}
+        >
+          <service.icon className="h-6 w-6" strokeWidth={1.5} />
+        </motion.div>
+      </div>
+
+      {/* Title */}
+      <div className="relative mb-3 flex items-center gap-2.5">
+        <h3 className="font-display text-xl font-semibold text-ink transition-colors duration-300 group-hover:text-forest">
+          {t(service.titleKey)}
+        </h3>
+        {service.badgeKey && (
+          <motion.span
+            whileHover={{ scale: 1.05 }}
+            className="rounded-full bg-forest/10 px-2.5 py-0.5 font-body text-[11px] font-medium text-forest"
+          >
+            {t(service.badgeKey)}
+          </motion.span>
+        )}
+      </div>
+
+      {/* Description */}
+      <p className="relative font-body text-sm leading-relaxed text-ink/60 transition-colors duration-300 group-hover:text-ink/70">
+        {t(service.descKey)}
+      </p>
+
+      {/* Decorative corner */}
+      <div className="absolute -bottom-2 -right-2 h-24 w-24 rounded-full bg-forest/5 opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:-bottom-4 group-hover:-right-4" />
+    </motion.div>
+  );
+}
 
 export default function Servicios() {
+  const { t } = useLang();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  const decorY = useTransform(scrollYProgress, [0, 1], [40, -40]);
+
+  const titleWords = t("services.title").split(" ");
+
   return (
-    <section id="servicios" className="bg-bg py-20 md:py-32">
-      <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-10">
+    <section
+      ref={sectionRef}
+      id="servicios"
+      className="relative overflow-hidden bg-bg-dark py-14 md:py-20"
+    >
+      {/* Decorative elements */}
+      <motion.div
+        style={{ y: decorY }}
+        className="absolute left-[5%] top-[10%] h-72 w-72 rounded-full bg-forest/5 blur-3xl"
+      />
+      <motion.div
+        style={{ y: decorY }}
+        className="absolute bottom-[15%] right-[10%] h-56 w-56 rounded-full bg-bronze/5 blur-3xl"
+      />
+
+      <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-10">
         {/* Header */}
-        <div className="mb-16 md:mb-20">
-          <p className="mb-4 font-body text-xs font-semibold uppercase tracking-[0.2em] text-bronze">
-            Servicios
-          </p>
-          <h2 className="max-w-2xl font-display text-3xl font-semibold leading-tight text-ink md:text-[2.75rem]">
-            Un sistema, no una lista de servicios sueltos
+        <div className="mb-12 md:mb-16">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="mb-4 font-body text-xs font-semibold uppercase tracking-[0.2em] text-bronze"
+          >
+            {t("services.badge")}
+          </motion.p>
+
+          <h2 className="max-w-3xl font-display text-3xl font-semibold leading-tight text-bg md:text-[2.75rem]">
+            {titleWords.map((word, i) => (
+              <motion.span
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  delay: i * 0.05,
+                  duration: 0.5,
+                  ease: "easeOut",
+                }}
+                className="mr-[0.3em] inline-block"
+              >
+                {word}
+              </motion.span>
+            ))}
           </h2>
         </div>
 
-        {/* Grid */}
-        <motion.div
-          variants={container}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-80px" }}
-          className="grid gap-5 md:grid-cols-2"
-        >
-          {SERVICES.map((service) => (
-            <motion.div
-              key={service.title}
-              variants={item}
-              whileHover={{ y: -4 }}
-              className="group rounded-2xl border border-line bg-bg p-6 transition-colors duration-300 hover:border-bronze sm:p-8"
-            >
-              <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-bronze/10 text-bronze transition-colors duration-300 group-hover:bg-bronze/20">
-                <service.icon className="h-5.5 w-5.5" strokeWidth={1.5} />
-              </div>
-
-              <div className="mb-3 flex items-center gap-2.5">
-                <h3 className="font-display text-lg font-semibold text-ink">
-                  {service.title}
-                </h3>
-                {service.badge && (
-                  <span className="rounded-full bg-bronze/20 px-2.5 py-0.5 font-body text-[11px] font-medium text-bronze">
-                    {service.badge}
-                  </span>
-                )}
-              </div>
-
-              <p className="font-body text-sm leading-relaxed text-ink/60">
-                {service.description}
-              </p>
-            </motion.div>
+        {/* Bento Grid */}
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-3 md:grid-rows-2">
+          {SERVICES.map((service, i) => (
+            <ServiceCard key={service.titleKey} service={service} index={i} />
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

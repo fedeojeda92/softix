@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --color-bg: #F7F5F1;
-  --color-bg-dark: #12110F;
-  --color-ink: #1C1B19;
-  --color-bronze: #8A6A4F;
-  --color-forest: #2C4A3E;
-  --color-line: #DCD6CC;
+  --color-bg: #FAF8F5;
+  --color-bg-dark: #2D2926;
+  --color-ink: #2D2926;
+  --color-bronze: #8B7355;
+  --color-forest: #C2775E;
+  --color-line: #D4CFC9;
 }
 
 @layer base {
@@ -37,5 +37,18 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /* Disable parallax and scroll-linked animations */
+  [style*="transform"] {
+    transform: none !important;
+  }
+
+  /* Disable hover effects on touch devices */
+  @media (hover: none) {
+    :hover {
+      transform: none !important;
+      transition: none !important;
+    }
   }
 }

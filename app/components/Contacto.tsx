@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import { motion } from "framer-motion";
 import { Mail, Phone, Clock } from "lucide-react";
+import { useLang } from "../lib/LanguageContext";
 
-const WHATSAPP_LINK = "https://wa.me/549XXXXXXXXXX";
+const WHATSAPP_LINK = "https://wa.me/5491159568286?text=Hola%2C%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20sus%20servicios.";
 
 interface FormData {
   nombre: string;
@@ -19,7 +21,21 @@ interface FormErrors {
   mensaje?: string;
 }
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.08 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+};
+
 export default function Contacto() {
+  const { t } = useLang();
   const [form, setForm] = useState<FormData>({
     nombre: "",
     email: "",
@@ -32,13 +48,13 @@ export default function Contacto() {
 
   const validate = (): FormErrors => {
     const e: FormErrors = {};
-    if (!form.nombre.trim()) e.nombre = "Ingresá tu nombre";
+    if (!form.nombre.trim()) e.nombre = t("contact.error.name");
     if (!form.email.trim()) {
-      e.email = "Ingresá tu email";
+      e.email = t("contact.error.email");
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      e.email = "Email inválido";
+      e.email = t("contact.error.emailInvalid");
     }
-    if (!form.mensaje.trim()) e.mensaje = "Ingresá tu mensaje";
+    if (!form.mensaje.trim()) e.mensaje = t("contact.error.message");
     return e;
   };
 
@@ -49,7 +65,6 @@ export default function Contacto() {
     if (Object.keys(e).length > 0) return;
 
     setLoading(true);
-    // TODO: conectar a endpoint de envío / Resend
     console.log("Form payload:", form);
     await new Promise((r) => setTimeout(r, 1500));
     setLoading(false);
@@ -57,145 +72,190 @@ export default function Contacto() {
   };
 
   const inputClass =
-    "w-full rounded-xl border border-line bg-bg px-4 py-3 font-body text-sm text-ink placeholder:text-ink/30 outline-none transition-colors focus:border-forest";
+    "w-full rounded-xl border border-line bg-bg px-4 py-3 font-body text-sm text-ink placeholder:text-ink/30 outline-none transition-all duration-300 focus:border-forest focus:shadow-[0_0_0_3px_rgba(194,119,94,0.1)] focus:scale-[1.01]";
 
   return (
-    <section id="contacto" className="bg-bg py-20 md:py-32">
+    <section id="contacto" className="bg-bg py-14 md:py-20">
       <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-10">
-        {/* Header */}
-        <div className="mb-16 text-center md:mb-20">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-12 text-center md:mb-16"
+        >
           <p className="mb-4 font-body text-xs font-semibold uppercase tracking-[0.2em] text-bronze">
-            Contacto
+            {t("contact.badge")}
           </p>
           <h2 className="font-display text-3xl font-semibold text-ink md:text-[2.75rem]">
-            Hablemos de tu proyecto
+            {t("contact.title")}
           </h2>
-        </div>
+        </motion.div>
 
-        <div className="grid gap-16 md:grid-cols-5 md:gap-20">
-          {/* Form */}
-          <form
+        <div className="grid gap-12 md:grid-cols-5 md:gap-16">
+          <motion.form
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
             onSubmit={handleSubmit}
             noValidate
             className="flex flex-col gap-5 md:col-span-3"
           >
-            {/* Nombre */}
-            <div>
+            <motion.div variants={itemVariants}>
               <input
                 type="text"
-                placeholder="Nombre"
+                placeholder={t("contact.name")}
                 value={form.nombre}
                 onChange={(e) => setForm({ ...form, nombre: e.target.value })}
                 className={inputClass}
               />
               {errors.nombre && (
-                <p className="mt-1.5 font-body text-xs text-red-500">{errors.nombre}</p>
+                <motion.p
+                  initial={{ opacity: 0, y: -5, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className="mt-1.5 font-body text-xs text-red-500"
+                >
+                  {errors.nombre}
+                </motion.p>
               )}
-            </div>
+            </motion.div>
 
-            {/* Email */}
-            <div>
+            <motion.div variants={itemVariants}>
               <input
                 type="email"
-                placeholder="Email"
+                placeholder={t("contact.email")}
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 className={inputClass}
               />
               {errors.email && (
-                <p className="mt-1.5 font-body text-xs text-red-500">{errors.email}</p>
+                <motion.p
+                  initial={{ opacity: 0, y: -5, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className="mt-1.5 font-body text-xs text-red-500"
+                >
+                  {errors.email}
+                </motion.p>
               )}
-            </div>
+            </motion.div>
 
-            {/* Teléfono */}
-            <input
-              type="tel"
-              placeholder="Teléfono (opcional)"
-              value={form.telefono}
-              onChange={(e) => setForm({ ...form, telefono: e.target.value })}
-              className={inputClass}
-            />
+            <motion.div variants={itemVariants}>
+              <input
+                type="tel"
+                placeholder={t("contact.phone")}
+                value={form.telefono}
+                onChange={(e) => setForm({ ...form, telefono: e.target.value })}
+                className={inputClass}
+              />
+            </motion.div>
 
-            {/* Tipo de propiedad */}
-            <select
-              value={form.tipoPropiedad}
-              onChange={(e) => setForm({ ...form, tipoPropiedad: e.target.value })}
-              className={`${inputClass} ${!form.tipoPropiedad ? "text-ink/30" : ""}`}
-            >
-              <option value="">Tipo de propiedad (opcional)</option>
-              <option value="casa">Casa</option>
-              <option value="departamento">Departamento</option>
-              <option value="ph">PH</option>
-              <option value="terreno">Terreno</option>
-              <option value="local">Local comercial</option>
-              <option value="oficina">Oficina</option>
-              <option value="otro">Otro</option>
-            </select>
+            <motion.div variants={itemVariants}>
+              <select
+                value={form.tipoPropiedad}
+                onChange={(e) => setForm({ ...form, tipoPropiedad: e.target.value })}
+                className={`${inputClass} ${!form.tipoPropiedad ? "text-ink/30" : ""}`}
+              >
+                <option value="">{t("contact.propertyType")}</option>
+                <option value="casa">{t("contact.prop.casa")}</option>
+                <option value="departamento">{t("contact.prop.departamento")}</option>
+                <option value="ph">{t("contact.prop.ph")}</option>
+                <option value="terreno">{t("contact.prop.terreno")}</option>
+                <option value="local">{t("contact.prop.local")}</option>
+                <option value="oficina">{t("contact.prop.oficina")}</option>
+                <option value="otro">{t("contact.prop.otro")}</option>
+              </select>
+            </motion.div>
 
-            {/* Mensaje */}
-            <div>
+            <motion.div variants={itemVariants}>
               <textarea
-                placeholder="Mensaje"
+                placeholder={t("contact.message")}
                 rows={5}
                 value={form.mensaje}
                 onChange={(e) => setForm({ ...form, mensaje: e.target.value })}
                 className={`${inputClass} resize-none`}
               />
               {errors.mensaje && (
-                <p className="mt-1.5 font-body text-xs text-red-500">{errors.mensaje}</p>
+                <motion.p
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-1.5 font-body text-xs text-red-500"
+                >
+                  {errors.mensaje}
+                </motion.p>
               )}
-            </div>
+            </motion.div>
 
-            {/* Submit */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="mt-2 rounded-full bg-forest py-3.5 font-body text-sm font-medium text-white transition-colors hover:bg-forest/90 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {loading ? "Enviando..." : "Enviar mensaje"}
-            </button>
-          </form>
+            <motion.div variants={itemVariants}>
+              <motion.button
+                type="submit"
+                disabled={loading}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="mt-2 w-full rounded-full bg-forest py-3.5 font-body text-sm font-medium text-white transition-colors hover:bg-forest/90 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {loading ? t("contact.sending") : t("contact.send")}
+              </motion.button>
+            </motion.div>
+          </motion.form>
 
-          {/* Contact info */}
-          <div className="flex flex-col gap-8 md:col-span-2">
-            <div>
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className="flex flex-col gap-8 md:col-span-2"
+          >
+            <motion.div variants={itemVariants}>
               <h4 className="mb-1 font-display text-base font-semibold text-ink">
-                Email
+                {t("contact.emailLabel")}
               </h4>
               <a
                 href="mailto:hola@softix.com.ar"
-                className="flex items-center gap-2.5 font-body text-sm text-ink/60 transition-colors hover:text-ink"
+                className="group flex items-center gap-2.5 font-body text-sm text-ink/60 transition-colors hover:text-ink"
               >
-                <Mail className="h-4 w-4 text-bronze" strokeWidth={1.5} />
+                <motion.span
+                  whileHover={{ rotate: 10, scale: 1.1 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <Mail className="h-4 w-4 text-bronze" strokeWidth={1.5} />
+                </motion.span>
                 hola@softix.com.ar
               </a>
-            </div>
+            </motion.div>
 
-            <div>
+            <motion.div variants={itemVariants}>
               <h4 className="mb-1 font-display text-base font-semibold text-ink">
-                WhatsApp
+                {t("contact.whatsappLabel")}
               </h4>
               <a
                 href={WHATSAPP_LINK}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2.5 font-body text-sm text-ink/60 transition-colors hover:text-ink"
+                className="group flex items-center gap-2.5 font-body text-sm text-ink/60 transition-colors hover:text-ink"
               >
-                <Phone className="h-4 w-4 text-bronze" strokeWidth={1.5} />
-                +54 9 XX XXXX-XXXX
+                <motion.span
+                  whileHover={{ rotate: -10, scale: 1.1 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <Phone className="h-4 w-4 text-bronze" strokeWidth={1.5} />
+                </motion.span>
+                +54 9 115956-8286
               </a>
-            </div>
+            </motion.div>
 
-            <div>
+            <motion.div variants={itemVariants}>
               <h4 className="mb-1 font-display text-base font-semibold text-ink">
-                Horario de atención
+                {t("contact.hoursLabel")}
               </h4>
               <p className="flex items-center gap-2.5 font-body text-sm text-ink/60">
                 <Clock className="h-4 w-4 text-bronze" strokeWidth={1.5} />
-                Lun a Vie — 9 a 18 hs
+                {t("contact.hours")}
               </p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </section>

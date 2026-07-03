@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
+import { motion } from "framer-motion";
 import PanoramaViewer from "./PanoramaViewer";
+import { useLang } from "../lib/LanguageContext";
 
 function usePrefersReducedMotion() {
   const [reduced, setReduced] = useState(false);
@@ -18,6 +20,7 @@ function usePrefersReducedMotion() {
 export default function TourVirtual360() {
   const [showHint, setShowHint] = useState(true);
   const reduced = usePrefersReducedMotion();
+  const { t } = useLang();
 
   const handleInteraction = useCallback(() => {
     const timer = setTimeout(() => setShowHint(false), 3000);
@@ -27,31 +30,40 @@ export default function TourVirtual360() {
   return (
     <section
       id="tour-360"
-      className="relative bg-bg-dark py-20 md:py-32"
+      className="relative bg-bg-dark py-14 md:py-20"
     >
       <div className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-10">
-        {/* Header */}
-        <div className="mb-10 text-center md:mb-16">
-          <p className="mb-4 font-body text-xs font-semibold uppercase tracking-[0.2em] text-bronze">
-            Tour Virtual
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-8 text-center md:mb-12"
+        >
+          <p className="mb-3 font-body text-xs font-semibold uppercase tracking-[0.2em] text-bronze">
+            {t("tour.badge")}
           </p>
           <h2 className="mx-auto max-w-2xl font-display text-2xl font-semibold leading-tight text-white sm:text-3xl md:text-[2.75rem]">
-            Explorá el espacio como si estuvieras ahí
+            {t("tour.title")}
           </h2>
-          <p className="mx-auto mt-5 max-w-xl font-body text-sm leading-relaxed text-white/60 sm:text-base">
-            Esta es exactamente la tecnología que se integra en la web de cada
-            inmobiliaria cliente: recorridos inmersivos, sin plugins, desde
-            cualquier dispositivo.
+          <p className="mx-auto mt-4 max-w-xl font-body text-sm leading-relaxed text-white/60 sm:text-base">
+            {t("tour.description")}
           </p>
-        </div>
+        </motion.div>
 
-        {/* Viewer container — 50vh mobile, 70vh desktop */}
-        <div className="relative mx-auto" style={{ maxWidth: "1100px" }}>
+        <motion.div
+          initial={{ opacity: 0, y: 40, scale: 0.95 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.8, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+          className="relative mx-auto"
+          style={{ maxWidth: "1100px" }}
+        >
           <div
             className="h-[50vh] w-full overflow-hidden md:h-[70vh]"
             style={{
               borderRadius: "12px",
-              border: "1px solid rgba(220, 214, 204, 0.2)",
+              border: "1px solid rgba(212, 207, 201, 0.2)",
             }}
           >
             <PanoramaViewer
@@ -61,14 +73,20 @@ export default function TourVirtual360() {
             />
           </div>
 
-          {/* Drag hint */}
-          <div
-            className={`pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 transition-opacity duration-500 sm:bottom-6 ${
-              showHint ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <div className="flex items-center gap-2 rounded-full bg-bg-dark/80 px-4 py-2 backdrop-blur-sm sm:px-5 sm:py-2.5">
-              {/* Hand/drag icon */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.8, duration: 0.5 }}
+              className={`pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 transition-opacity duration-500 sm:bottom-6 ${
+                showHint ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              <motion.div
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                className="flex items-center gap-2 rounded-full bg-bg-dark/80 px-4 py-2 backdrop-blur-sm sm:px-5 sm:py-2.5"
+              >
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
@@ -85,11 +103,11 @@ export default function TourVirtual360() {
                 <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" />
               </svg>
               <span className="font-body text-xs font-medium text-white/70">
-                Arrastrá para mirar alrededor
+                {t("tour.hint")}
               </span>
-            </div>
-          </div>
-        </div>
+            </motion.div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   );

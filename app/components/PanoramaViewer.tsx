@@ -99,7 +99,7 @@ export default function PanoramaViewer({
     <div
       ref={containerRef}
       className="h-full w-full overflow-hidden rounded-[12px]"
-      style={{ background: "#12110F" }}
+      style={{ background: "#2D2926" }}
     />
   );
 }

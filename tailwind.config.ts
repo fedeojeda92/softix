@@ -9,12 +9,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        bg: "#F7F5F1",
-        "bg-dark": "#12110F",
-        ink: "#1C1B19",
-        bronze: "#8A6A4F",
-        forest: "#2C4A3E",
-        line: "#DCD6CC",
+        bg: "#FAF8F5",
+        "bg-dark": "#2D2926",
+        ink: "#2D2926",
+        bronze: "#8B7355",
+        forest: "#C2775E",
+        line: "#D4CFC9",
       },
       fontFamily: {
         display: ["var(--font-display)", "serif"],

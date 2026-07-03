@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useLang } from "../lib/LanguageContext";
 
 const WHATSAPP_LINK = "https://wa.me/5491159568286?text=Hola%2C%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20sus%20servicios.";
-const INSTAGRAM_LINK = "https://instagram.com/";
+const INSTAGRAM_LINK = "https://instagram.com/softix.ar";
 
 const QUICK_LINKS = [
   { key: "nav.home", href: "#" },

@@ -108,6 +108,7 @@ export default function Contacto() {
                 placeholder={t("contact.name")}
                 value={form.nombre}
                 onChange={(e) => setForm({ ...form, nombre: e.target.value })}
+                aria-label={t("contact.name")}
                 className={inputClass}
               />
               {errors.nombre && (
@@ -128,6 +129,7 @@ export default function Contacto() {
                 placeholder={t("contact.email")}
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
+                aria-label={t("contact.email")}
                 className={inputClass}
               />
               {errors.email && (
@@ -148,6 +150,7 @@ export default function Contacto() {
                 placeholder={t("contact.phone")}
                 value={form.telefono}
                 onChange={(e) => setForm({ ...form, telefono: e.target.value })}
+                aria-label={t("contact.phone")}
                 className={inputClass}
               />
             </motion.div>
@@ -156,6 +159,7 @@ export default function Contacto() {
               <select
                 value={form.tipoPropiedad}
                 onChange={(e) => setForm({ ...form, tipoPropiedad: e.target.value })}
+                aria-label={t("contact.propertyType")}
                 className={`${inputClass} ${!form.tipoPropiedad ? "text-ink/30" : ""}`}
               >
                 <option value="">{t("contact.propertyType")}</option>
@@ -175,6 +179,7 @@ export default function Contacto() {
                 rows={5}
                 value={form.mensaje}
                 onChange={(e) => setForm({ ...form, mensaje: e.target.value })}
+                aria-label={t("contact.message")}
                 className={`${inputClass} resize-none`}
               />
               {errors.mensaje && (

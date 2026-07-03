@@ -82,7 +82,7 @@ export default function Hero() {
           >
             <Image
               src={SLIDES[current].image}
-              alt=""
+              alt="Softix - Servicios digitales para inmobiliarias"
               fill
               priority={current === 0}
               sizes="100vw"

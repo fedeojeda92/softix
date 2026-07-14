@@ -17,7 +17,7 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Softix | Software, Tours Virtuales 360 y Marketing para Inmobiliarias",
+  title: "Fersion Tech | Software, Tours Virtuales 360 y Marketing para Inmobiliarias",
   description:
     "Desarrollo de software, tours virtuales 360, automatizaciones CRM, fotografía profesional y marketing digital para inmobiliarias y agentes inmobiliarios. Una sola agencia, para todo.",
   keywords: [
@@ -29,9 +29,9 @@ export const metadata: Metadata = {
     "desarrollo web inmobiliario",
     "agencia digital inmobiliaria",
   ],
-  authors: [{ name: "Softix" }],
-  creator: "Softix",
-  publisher: "Softix",
+  authors: [{ name: "Fersion Tech" }],
+  creator: "Fersion Tech",
+  publisher: "Fersion Tech",
   metadataBase: new URL("https://softix-nine.vercel.app"),
   alternates: {
     canonical: "/",
@@ -44,8 +44,8 @@ export const metadata: Metadata = {
     type: "website",
     locale: "es_AR",
     url: "https://softix-nine.vercel.app",
-    siteName: "Softix",
-    title: "Softix | Software, Tours Virtuales 360 y Marketing para Inmobiliarias",
+    siteName: "Fersion Tech",
+    title: "Fersion Tech | Software, Tours Virtuales 360 y Marketing para Inmobiliarias",
     description:
       "Desarrollo de software, tours virtuales 360, automatizaciones CRM, fotografía profesional y marketing digital para inmobiliarias y agentes inmobiliarios.",
     images: [
@@ -53,13 +53,13 @@ export const metadata: Metadata = {
         url: "/images/Imagen_hero_1.jpg",
         width: 1200,
         height: 630,
-        alt: "Softix - Servicios digitales para inmobiliarias",
+        alt: "Fersion Tech - Servicios digitales para inmobiliarias",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Softix | Software, Tours Virtuales 360 y Marketing para Inmobiliarias",
+    title: "Fersion Tech | Software, Tours Virtuales 360 y Marketing para Inmobiliarias",
     description:
       "Desarrollo de software, tours virtuales 360, automatizaciones CRM, fotografía profesional y marketing digital para inmobiliarias.",
     images: ["/images/Imagen_hero_1.jpg"],
@@ -85,7 +85,7 @@ export default function RootLayout({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
-    name: "Softix",
+    name: "Fersion Tech",
     description:
       "Desarrollo de software, tours virtuales 360, automatizaciones CRM, fotografía profesional y marketing digital para inmobiliarias y agentes inmobiliarios.",
     url: "https://softix-nine.vercel.app",

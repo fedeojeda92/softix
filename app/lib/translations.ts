@@ -11,14 +11,12 @@ export const translations: Record<Lang, Record<string, string>> = {
     "nav.contacto": "Contacto",
 
     // Hero
-    "hero.slide1":
-      "Software y webs completas para servicios inmobiliarios, con tours virtuales 360° implementados, automatizaciones y soporte permanente. Una sola agencia, para todo.",
-    "hero.slide2":
-      "Potenciado por inteligencia artificial: gestión y automatización de última generación.",
-    "hero.slide3":
-      "Equipamiento profesional de fotografía, video y drone para cada propiedad.",
-    "hero.slide4": "Fotografía HDR, video, drone, tour virtual 360°.",
-    "hero.cta": "Conocer el sistema",
+    "hero.badge": "Tecnología para Real Estate",
+    "hero.slide1": "Tu presencia digital, potenciada",
+    "hero.slide2": "Automatización con inteligencia artificial",
+    "hero.slide3": "Imágenes que convierten",
+    "hero.slide4": "360° · Drone · Video · AI",
+    "hero.cta": "Explorar el sistema",
 
     // Tour 360
     "tour.badge": "Tour Virtual",
@@ -32,7 +30,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     "about.p1":
       "Soy Federico Ojeda, formado en la UTN y de manera autodidacta como desarrollador de software, trabajando hace más de 4 años con empresas y realtors (agentes inmobiliarios) estadounidenses de manera remota.",
     "about.p2":
-      "Junto con Sergio Alvarenga, fotógrafo y filmmaker profesional, decidimos crear Softix. Utilizando las últimas herramientas en tecnología, multimedia e inteligencia artificial, desarrollamos un sistema integral para inmobiliarias y agentes: contenido, presencia digital y gestión, todo en un mismo lugar.",
+      "Junto con Sergio Alvarenga, fotógrafo y filmmaker profesional, decidimos crear Fersion Tech. Utilizando las últimas herramientas en tecnología, multimedia e inteligencia artificial, desarrollamos un sistema integral para inmobiliarias y agentes: contenido, presencia digital y gestión, todo en un mismo lugar.",
     "about.skill1": "Desarrollo de software",
     "about.skill2": "Fotografía y filmmaking profesional",
     "about.skill3": "Inteligencia artificial",
@@ -119,6 +117,9 @@ export const translations: Record<Lang, Record<string, string>> = {
     "footer.nav": "Navegación",
     "footer.follow": "Seguinos",
     "footer.rights": "Todos los derechos reservados.",
+
+    // Mobile menu
+    "menu.whatsapp": "Contactanos por WhatsApp",
   },
   EN: {
     // Navbar
@@ -130,13 +131,11 @@ export const translations: Record<Lang, Record<string, string>> = {
     "nav.contacto": "Contact",
 
     // Hero
-    "hero.slide1":
-      "Complete software and websites for real estate services, with 360° virtual tours, automations, and ongoing support. One agency, for everything.",
-    "hero.slide2":
-      "Powered by artificial intelligence: cutting-edge management and automation.",
-    "hero.slide3":
-      "Professional photography, video, and drone equipment for every property.",
-    "hero.slide4": "HDR photography, video, drone, 360° virtual tour.",
+    "hero.badge": "Technology for Real Estate",
+    "hero.slide1": "Your digital presence, amplified",
+    "hero.slide2": "Automation with artificial intelligence",
+    "hero.slide3": "Images that convert",
+    "hero.slide4": "360° · Drone · Video · AI",
     "hero.cta": "Explore the system",
 
     // Tour 360
@@ -151,7 +150,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     "about.p1":
       "I'm Federico Ojeda, trained at UTN and self-taught as a software developer, working for over 4 years with US-based companies and realtors remotely.",
     "about.p2":
-      "Together with Sergio Alvarenga, a professional photographer and filmmaker, we decided to create Softix. Using the latest tools in technology, multimedia, and artificial intelligence, we developed a comprehensive system for real estate agencies and agents: content, digital presence, and management, all in one place.",
+      "Together with Sergio Alvarenga, a professional photographer and filmmaker, we decided to create Fersion Tech. Using the latest tools in technology, multimedia, and artificial intelligence, we developed a comprehensive system for real estate agencies and agents: content, digital presence, and management, all in one place.",
     "about.skill1": "Software development",
     "about.skill2": "Professional photography & filmmaking",
     "about.skill3": "Artificial intelligence",
@@ -238,5 +237,8 @@ export const translations: Record<Lang, Record<string, string>> = {
     "footer.nav": "Navigation",
     "footer.follow": "Follow us",
     "footer.rights": "All rights reserved.",
+
+    // Mobile menu
+    "menu.whatsapp": "Contact us on WhatsApp",
   },
 };

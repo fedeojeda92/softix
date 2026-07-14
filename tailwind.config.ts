@@ -15,6 +15,7 @@ const config: Config = {
         bronze: "#8B7355",
         forest: "#C2775E",
         line: "#D4CFC9",
+        "deep-green": "#2C4A3E",
       },
       fontFamily: {
         display: ["var(--font-display)", "serif"],

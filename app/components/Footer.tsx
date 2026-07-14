@@ -1,10 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useLang } from "../lib/LanguageContext";
 
 const WHATSAPP_LINK = "https://wa.me/5491159568286?text=Hola%2C%20me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20sus%20servicios.";
-const INSTAGRAM_LINK = "https://instagram.com/softix.ar";
+const INSTAGRAM_LINK = "https://instagram.com/fersiontech";
 
 const QUICK_LINKS = [
   { key: "nav.home", href: "#" },
@@ -37,12 +38,18 @@ export default function Footer() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
-        className="mx-auto max-w-6xl px-6 lg:px-10"
+        className="mx-auto max-w-6xl px-6 lg:px-10 xl:max-w-[90rem] xl:px-12"
       >
         <div className="grid gap-12 md:grid-cols-3 md:gap-8">
           <motion.div variants={itemVariants}>
-            <a href="#" className="font-display text-xl font-semibold text-white">
-              Softix
+            <a href="#" className="flex items-center">
+              <Image
+                src="/images/logo.png"
+                alt="Fersion Tech"
+                width={100}
+                height={24}
+                className="h-auto w-auto brightness-0 invert sm:w-[120px] lg:w-[140px]"
+              />
             </a>
             <p className="mt-3 max-w-xs font-body text-sm leading-relaxed text-white/40">
               {t("footer.desc")}
@@ -115,7 +122,7 @@ export default function Footer() {
           className="mt-12 border-t border-white/10 pt-6"
         >
           <p className="text-center font-body text-xs text-white/30">
-            &copy; {new Date().getFullYear()} Softix. {t("footer.rights")}
+            &copy; {new Date().getFullYear()} Fersion Tech. {t("footer.rights")}
           </p>
         </motion.div>
       </motion.div>

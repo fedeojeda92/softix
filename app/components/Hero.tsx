@@ -230,29 +230,39 @@ export default function Hero() {
       </div>
 
       {/* ── Arrows ── */}
-      <motion.button
-        onClick={prev}
-        whileTap={{ scale: 0.85 }}
-        transition={{ type: "spring", stiffness: 400, damping: 20 }}
-        aria-label="Slide anterior"
-        className="absolute left-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 text-white/70 backdrop-blur-sm transition-colors hover:border-white/40 hover:text-white sm:left-5 sm:h-11 sm:w-11 lg:left-8 xl:left-12 xl:h-12 xl:w-12"
+      <div
+        className="pointer-events-none absolute left-3 z-20 sm:left-5 lg:left-8 xl:left-12"
+        style={{ top: "50%", transform: "translateY(-50%)" }}
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-        </svg>
-      </motion.button>
+        <motion.button
+          onClick={prev}
+          whileTap={{ scale: 0.85 }}
+          transition={{ type: "spring", stiffness: 400, damping: 20 }}
+          aria-label="Slide anterior"
+          className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-white/70 backdrop-blur-sm transition-colors hover:border-white/40 hover:text-white sm:h-11 sm:w-11 xl:h-12 xl:w-12"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+          </svg>
+        </motion.button>
+      </div>
 
-      <motion.button
-        onClick={next}
-        whileTap={{ scale: 0.85 }}
-        transition={{ type: "spring", stiffness: 400, damping: 20 }}
-        aria-label="Siguiente slide"
-        className="absolute right-3 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 text-white/70 backdrop-blur-sm transition-colors hover:border-white/40 hover:text-white sm:right-5 sm:h-11 sm:w-11 lg:right-8 xl:right-12 xl:h-12 xl:w-12"
+      <div
+        className="pointer-events-none absolute right-3 z-20 sm:right-5 lg:right-8 xl:right-12"
+        style={{ top: "50%", transform: "translateY(-50%)" }}
       >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
-          <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-        </svg>
-      </motion.button>
+        <motion.button
+          onClick={next}
+          whileTap={{ scale: 0.85 }}
+          transition={{ type: "spring", stiffness: 400, damping: 20 }}
+          aria-label="Siguiente slide"
+          className="pointer-events-auto flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-white/70 backdrop-blur-sm transition-colors hover:border-white/40 hover:text-white sm:h-11 sm:w-11 xl:h-12 xl:w-12"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+          </svg>
+        </motion.button>
+      </div>
 
       {/* ── Slide counter ── */}
       <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 items-center gap-3 sm:bottom-10 lg:bottom-12 xl:bottom-16">

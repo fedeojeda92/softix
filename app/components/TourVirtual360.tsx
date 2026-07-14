@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import PanoramaViewer from "./PanoramaViewer";
+import ThumbnailStrip from "./ThumbnailStrip";
+import { tourConfig } from "../data/tour-config";
 import { useLang } from "../lib/LanguageContext";
 
 function usePrefersReducedMotion() {
@@ -19,12 +21,32 @@ function usePrefersReducedMotion() {
 
 export default function TourVirtual360() {
   const [showHint, setShowHint] = useState(true);
+  const [activeScene, setActiveScene] = useState(tourConfig.firstScene);
+  const loadSceneRef = useRef<((sceneId: string) => void) | null>(null);
   const reduced = usePrefersReducedMotion();
   const { t } = useLang();
 
+  const hintTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const handleInteraction = useCallback(() => {
-    const timer = setTimeout(() => setShowHint(false), 3000);
-    return () => clearTimeout(timer);
+    if (hintTimerRef.current) clearTimeout(hintTimerRef.current);
+    hintTimerRef.current = setTimeout(() => setShowHint(false), 3000);
+  }, []);
+
+  const handleSceneChange = useCallback((sceneId: string) => {
+    setActiveScene(sceneId);
+  }, []);
+
+  const handleViewerReady = useCallback(
+    (loadSceneFn: (sceneId: string) => void) => {
+      loadSceneRef.current = loadSceneFn;
+    },
+    [],
+  );
+
+  const handleSelectScene = useCallback((sceneId: string) => {
+    loadSceneRef.current?.(sceneId);
+    setActiveScene(sceneId);
   }, []);
 
   return (
@@ -67,11 +89,18 @@ export default function TourVirtual360() {
             }}
           >
             <PanoramaViewer
-              imageSrc="/images/Imagen_360_prueba.jpg"
+              tourConfig={tourConfig}
               autoRotate={!reduced}
               onInteraction={handleInteraction}
+              onSceneChange={handleSceneChange}
+              onViewerReady={handleViewerReady}
             />
           </div>
+
+          <ThumbnailStrip
+            activeScene={activeScene}
+            onSelectScene={handleSelectScene}
+          />
 
             <motion.div
               initial={{ opacity: 0, y: 10 }}

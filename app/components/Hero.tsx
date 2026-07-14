@@ -8,21 +8,25 @@ import { useLang } from "../lib/LanguageContext";
 const SLIDES = [
   {
     image: "/images/hero_1.jpg",
+    imageMobile: "/images/hero_mobile_1.jpg",
     phraseKey: "hero.slide1",
     cta: { labelKey: "hero.cta", href: "#servicios" },
   },
   {
     image: "/images/hero_2.jpg",
+    imageMobile: "/images/hero_mobile_2.jpg",
     phraseKey: "hero.slide2",
     cta: { labelKey: "hero.cta", href: "#servicios" },
   },
   {
     image: "/images/hero_3.jpg",
+    imageMobile: "/images/hero_mobile_3.jpg",
     phraseKey: "hero.slide3",
     cta: { labelKey: "hero.cta", href: "#servicios" },
   },
   {
     image: "/images/hero_4.jpg",
+    imageMobile: "/images/hero_mobile_4.jpg",
     phraseKey: "hero.slide4",
     cta: { labelKey: "hero.cta", href: "#servicios" },
   },
@@ -40,6 +44,18 @@ function usePrefersReducedMotion() {
     return () => mq.removeEventListener("change", handler);
   }, []);
   return reduced;
+}
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)");
+    setIsMobile(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+  return isMobile;
 }
 
 function AnimatedHeadline({
@@ -77,6 +93,7 @@ function AnimatedHeadline({
 export default function Hero() {
   const [current, setCurrent] = useState(0);
   const reduced = usePrefersReducedMotion();
+  const isMobile = useIsMobile();
   const { t } = useLang();
 
   const goTo = useCallback(
@@ -119,7 +136,7 @@ export default function Hero() {
             transition={{ duration: INTERVAL / 1000, ease: "linear" }}
           >
             <Image
-              src={slide.image}
+              src={isMobile ? slide.imageMobile : slide.image}
               alt="Fersion Tech - Servicios digitales para inmobiliarias"
               fill
               priority={current === 0}

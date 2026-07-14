@@ -1,5 +1,20 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  productionBrowserSourceMaps: false,
+  webpack(config, { dev }) {
+    if (dev) {
+      config.devtool = false;
+    }
+    return config;
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/.well-known/appspecific/com.chrome.devtools.json",
+        destination: "/api/chrome-devtools",
+      },
+    ];
+  },
   async headers() {
     return [
       {

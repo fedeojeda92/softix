@@ -406,6 +406,7 @@ function MobileOverlay({
                   alt="Fersion Tech"
                   width={90}
                   height={22}
+                  priority
                   className="h-auto w-auto brightness-0 invert object-contain"
                 />
               </div>

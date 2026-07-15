@@ -102,7 +102,7 @@ export default function SobreNosotros() {
             >
               <motion.div style={{ scale: imageScale }} className="absolute inset-0">
                 <Image
-                  src="/images/Sobre_nosotros.jpeg"
+                  src="/images/nos.png"
                   alt="Sobre nosotros"
                   fill
                   sizes="(max-width: 1024px) 100vw, 45vw"

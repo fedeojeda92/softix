@@ -25,9 +25,9 @@ export default function ThumbnailStrip({
   const scenes = Object.entries(tourConfig.scenes);
 
   return (
-    <div className="mt-3 w-full">
+    <div className="mt-2 w-full md:mt-3">
       <div
-        className="flex gap-3 overflow-x-auto pb-2 scroll-smooth"
+        className="flex gap-2 overflow-x-auto pb-1 pt-2 scroll-smooth sm:gap-3"
         style={{ scrollbarWidth: "thin", scrollbarColor: "#8B7355 transparent" }}
       >
         {scenes.map(([sceneId, scene]) => {
@@ -36,12 +36,12 @@ export default function ThumbnailStrip({
             <button
               key={sceneId}
               onClick={() => onSelectScene(sceneId)}
-              className="group flex-shrink-0 flex flex-col items-center gap-1.5 focus:outline-none"
+              className="group flex-shrink-0 flex flex-col items-center gap-1 focus:outline-none sm:gap-1.5"
             >
               <div
                 className={`
-                  relative h-16 w-24 overflow-hidden rounded-lg border-2 transition-all duration-200
-                  sm:h-20 sm:w-32
+                  relative h-12 w-16 overflow-hidden rounded-lg border-2 transition-all duration-200
+                  sm:h-16 sm:w-24 md:h-[4.5rem] md:w-28
                   ${
                     isActive
                       ? "border-bronze opacity-100 shadow-lg shadow-bronze/20"
@@ -61,7 +61,7 @@ export default function ThumbnailStrip({
               </div>
               <span
                 className={`
-                  text-xs font-body font-medium transition-colors duration-200
+                  text-[10px] font-body font-medium transition-colors duration-200 sm:text-xs
                   ${isActive ? "text-bronze" : "text-white/50 group-hover:text-white/80"}
                 `}
               >

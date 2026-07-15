@@ -38,11 +38,11 @@ function DebugOverlay({ coords }: { coords: { pitch: number; yaw: number } }) {
   );
 }
 
-let tooltipStyleInjected = false;
+let globalStylesInjected = false;
 
-function injectTooltipStyles() {
-  if (tooltipStyleInjected) return;
-  tooltipStyleInjected = true;
+function injectGlobalStyles() {
+  if (globalStylesInjected) return;
+  globalStylesInjected = true;
   const style = document.createElement("style");
   style.textContent = `
     .tour-hotspot-wrapper {
@@ -92,12 +92,14 @@ function injectTooltipStyles() {
       line-height: 1.3;
       pointer-events: none;
     }
+    .pnlm-load-box { display: none !important; }
+    .pnlm-about-msg { display: none !important; }
   `;
   document.head.appendChild(style);
 }
 
 function createCustomTooltip(hotSpotDiv: HTMLElement, args: { text: string }) {
-  injectTooltipStyles();
+  injectGlobalStyles();
 
   const wrapper = document.createElement("div");
   wrapper.className = "tour-hotspot-wrapper";
@@ -132,8 +134,11 @@ export default function PanoramaViewer({
   const [isDebug, setIsDebug] = useState(false);
   const [debugCoords, setDebugCoords] = useState({ pitch: 0, yaw: 0 });
   const isDebugRef = useRef(false);
+  const [transitioning, setTransitioning] = useState(false);
+  const sceneChangeTimeRef = useRef(0);
 
   useEffect(() => {
+    injectGlobalStyles();
     if (typeof window !== "undefined") {
       const debug =
         new URLSearchParams(window.location.search).get("debug") === "true";
@@ -194,7 +199,7 @@ export default function PanoramaViewer({
           text: h.text,
           targetPitch: h.targetPitch ?? 0,
           targetYaw: h.targetYaw ?? 0,
-          targetHfov: h.targetHfov ?? 110,
+          targetHfov: h.targetHfov ?? 120,
           createTooltipFunc: createCustomTooltip,
           createTooltipArgs: { text: h.text },
         })),
@@ -206,6 +211,9 @@ export default function PanoramaViewer({
       scenes: scenesConfig,
       autoLoad: true,
       autoRotate: autoRotate ? -2 : 0,
+      hfov: 120,
+      minHfov: 50,
+      maxHfov: 120,
       compass: false,
       showZoomCtrl: true,
       mouseZoom: true,
@@ -220,8 +228,18 @@ export default function PanoramaViewer({
 
     const handleSceneChange = (...args: unknown[]) => {
       callbacksRef.current.onSceneChange?.(String(args[0]));
+      sceneChangeTimeRef.current = Date.now();
+      setTransitioning(true);
     };
     viewer.on("scenechange", handleSceneChange);
+
+    const MIN_TRANSITION_MS = 500;
+    const handleSceneLoad = () => {
+      const elapsed = Date.now() - sceneChangeTimeRef.current;
+      const remaining = Math.max(0, MIN_TRANSITION_MS - elapsed);
+      setTimeout(() => setTransitioning(false), remaining);
+    };
+    viewer.on("load", handleSceneLoad);
 
     if (onInteraction) {
       const el = containerRef.current;
@@ -263,11 +281,13 @@ export default function PanoramaViewer({
         viewer.off("load", attach);
         viewer.off("unload", detach);
         viewer.off("scenechange", handleSceneChange);
+        viewer.off("load", handleSceneLoad);
         detach();
       };
     } else {
       debugCleanupRef.current = () => {
         viewer.off("scenechange", handleSceneChange);
+        viewer.off("load", handleSceneLoad);
       };
     }
   }, [tourConfig, autoRotate, onInteraction]);
@@ -291,7 +311,16 @@ export default function PanoramaViewer({
       <div
         ref={containerRef}
         className="h-full w-full overflow-hidden rounded-[12px]"
-        style={{ background: "#2D2926" }}
+        style={{
+          background: "#2D2926",
+          transform: transitioning ? "scale(1.06)" : "scale(1)",
+          filter: transitioning
+            ? "blur(8px) brightness(0.5)"
+            : "blur(0px) brightness(1)",
+          transition: transitioning
+            ? "transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), filter 0.5s cubic-bezier(0.4, 0, 0.2, 1)"
+            : "transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), filter 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
+        }}
       />
     </div>
   );

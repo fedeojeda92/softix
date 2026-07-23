@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Fersion Tech" }],
   creator: "Fersion Tech",
   publisher: "Fersion Tech",
-  metadataBase: new URL("https://softix-nine.vercel.app"),
+  metadataBase: new URL("https://www.fersiontech.com"),
   alternates: {
     canonical: "/",
     languages: {
@@ -43,14 +43,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_AR",
-    url: "https://softix-nine.vercel.app",
+    url: "https://www.fersiontech.com",
     siteName: "Fersion Tech",
     title: "Fersion Tech | Software, Tours Virtuales 360 y Marketing para Inmobiliarias",
     description:
       "Desarrollo de software, tours virtuales 360, automatizaciones CRM, fotografía profesional y marketing digital para inmobiliarias y agentes inmobiliarios.",
     images: [
       {
-        url: "/images/Imagen_hero_1.jpg",
+        url: "/images/hero_1.jpg",
         width: 1200,
         height: 630,
         alt: "Fersion Tech - Servicios digitales para inmobiliarias",
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     title: "Fersion Tech | Software, Tours Virtuales 360 y Marketing para Inmobiliarias",
     description:
       "Desarrollo de software, tours virtuales 360, automatizaciones CRM, fotografía profesional y marketing digital para inmobiliarias.",
-    images: ["/images/Imagen_hero_1.jpg"],
+    images: ["/images/hero_1.jpg"],
   },
   robots: {
     index: true,
@@ -88,8 +88,8 @@ export default function RootLayout({
     name: "Fersion Tech",
     description:
       "Desarrollo de software, tours virtuales 360, automatizaciones CRM, fotografía profesional y marketing digital para inmobiliarias y agentes inmobiliarios.",
-    url: "https://softix-nine.vercel.app",
-    logo: "https://softix-nine.vercel.app/images/Imagen_hero_1.jpg",
+    url: "https://www.fersiontech.com",
+    logo: "https://www.fersiontech.com/images/logo.png",
     areaServed: {
       "@type": "Country",
       name: "Argentina",

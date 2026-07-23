@@ -251,7 +251,7 @@ export default function Contacto() {
                 {t("contact.emailLabel")}
               </h4>
               <a
-                href="mailto:hola@softix.com.ar"
+                href="mailto:fersiontech@gmail.com"
                 className="group flex items-center gap-2.5 font-body text-sm text-white/50 transition-colors hover:text-white"
               >
                 <motion.span
@@ -260,7 +260,7 @@ export default function Contacto() {
                 >
                   <Mail className="h-4 w-4 text-forest" strokeWidth={1.5} />
                 </motion.span>
-                hola@softix.com.ar
+                fersiontech@gmail.com
               </a>
             </motion.div>
 

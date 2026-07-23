@@ -53,6 +53,7 @@ export default function Contacto() {
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const validate = (): FormErrors => {
     const e: FormErrors = {};
@@ -73,10 +74,26 @@ export default function Contacto() {
     if (Object.keys(e).length > 0) return;
 
     setLoading(true);
-    console.log("Form payload:", form);
-    await new Promise((r) => setTimeout(r, 1500));
-    setLoading(false);
-    setForm({ nombre: "", email: "", telefono: "", tipoPropiedad: "", mensaje: "" });
+    try {
+      const res = await fetch("https://formsubmit.co/ajax/fersiontech@gmail.com", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          nombre: form.nombre,
+          email: form.email,
+          telefono: form.telefono || "No especificado",
+          tipoPropiedad: form.tipoPropiedad || "No especificado",
+          mensaje: form.mensaje,
+        }),
+      });
+      if (!res.ok) throw new Error("Error al enviar");
+      setSubmitted(true);
+      setForm({ nombre: "", email: "", telefono: "", tipoPropiedad: "", mensaje: "" });
+    } catch {
+      setErrors({ mensaje: "Error al enviar. Intentá de nuevo." });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const inputClass =
@@ -193,16 +210,16 @@ export default function Contacto() {
                 value={form.tipoPropiedad}
                 onChange={(e) => setForm({ ...form, tipoPropiedad: e.target.value })}
                 aria-label={t("contact.propertyType")}
-                className={`${inputClass} ${!form.tipoPropiedad ? "text-white/30" : "text-white"}`}
+                className={`${inputClass} appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22rgba(255%2C255%2C255%2C0.4)%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:20px] bg-[right_12px_center] bg-no-repeat pr-10 ${!form.tipoPropiedad ? "text-white/30" : "text-white"}`}
               >
-                <option value="">{t("contact.propertyType")}</option>
-                <option value="casa">{t("contact.prop.casa")}</option>
-                <option value="departamento">{t("contact.prop.departamento")}</option>
-                <option value="ph">{t("contact.prop.ph")}</option>
-                <option value="terreno">{t("contact.prop.terreno")}</option>
-                <option value="local">{t("contact.prop.local")}</option>
-                <option value="oficina">{t("contact.prop.oficina")}</option>
-                <option value="otro">{t("contact.prop.otro")}</option>
+                <option value="" className="bg-[#2a2623] text-white">{t("contact.propertyType")}</option>
+                <option value="casa" className="bg-[#2a2623] text-white">{t("contact.prop.casa")}</option>
+                <option value="departamento" className="bg-[#2a2623] text-white">{t("contact.prop.departamento")}</option>
+                <option value="ph" className="bg-[#2a2623] text-white">{t("contact.prop.ph")}</option>
+                <option value="terreno" className="bg-[#2a2623] text-white">{t("contact.prop.terreno")}</option>
+                <option value="local" className="bg-[#2a2623] text-white">{t("contact.prop.local")}</option>
+                <option value="oficina" className="bg-[#2a2623] text-white">{t("contact.prop.oficina")}</option>
+                <option value="otro" className="bg-[#2a2623] text-white">{t("contact.prop.otro")}</option>
               </select>
             </motion.div>
 
@@ -227,15 +244,30 @@ export default function Contacto() {
             </motion.div>
 
             <motion.div variants={itemVariants}>
-              <motion.button
-                type="submit"
-                disabled={loading}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="mt-2 w-full rounded-full bg-forest py-3.5 font-body text-sm font-medium text-white transition-colors hover:bg-forest/90 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {loading ? t("contact.sending") : t("contact.send")}
-              </motion.button>
+              {submitted ? (
+                <div className="mt-2 rounded-xl border border-forest/20 bg-forest/10 p-6 text-center backdrop-blur-sm">
+                  <p className="font-body text-sm font-medium text-forest">
+                    Mensaje enviado correctamente. Te contactamos pronto.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setSubmitted(false)}
+                    className="mt-3 font-body text-xs text-white/40 underline transition-colors hover:text-white/60"
+                  >
+                    Enviar otro mensaje
+                  </button>
+                </div>
+              ) : (
+                <motion.button
+                  type="submit"
+                  disabled={loading}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="mt-2 w-full rounded-full bg-forest py-3.5 font-body text-sm font-medium text-white transition-colors hover:bg-forest/90 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {loading ? t("contact.sending") : t("contact.send")}
+                </motion.button>
+              )}
             </motion.div>
           </motion.form>
 

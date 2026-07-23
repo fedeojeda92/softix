@@ -15,6 +15,13 @@ const QUICK_LINKS = [
   { key: "nav.contacto", href: "#contacto" },
 ];
 
+const FLOATING_DOTS = [
+  { x: "8%", y: "20%", size: 2, color: "bg-forest/15", delay: 0, duration: 7 },
+  { x: "88%", y: "30%", size: 3, color: "bg-bronze/10", delay: 1.5, duration: 6 },
+  { x: "75%", y: "85%", size: 2, color: "bg-forest/10", delay: 0.8, duration: 8 },
+  { x: "15%", y: "70%", size: 3, color: "bg-bronze/15", delay: 2, duration: 5 },
+];
+
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -32,17 +39,36 @@ export default function Footer() {
   const { t } = useLang();
 
   return (
-    <footer className="bg-bg-dark pt-16 pb-8">
+    <footer className="relative overflow-hidden bg-[#1a1715] pt-16 pb-8">
+      {/* Floating dots */}
+      {FLOATING_DOTS.map((dot, i) => (
+        <motion.div
+          key={i}
+          className={`absolute z-0 rounded-full ${dot.color}`}
+          style={{ left: dot.x, top: dot.y, width: dot.size, height: dot.size }}
+          animate={{
+            y: [0, -6, 0],
+            opacity: [0.2, 0.5, 0.2],
+          }}
+          transition={{
+            duration: dot.duration,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: dot.delay,
+          }}
+        />
+      ))}
+
       <motion.div
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
-        className="mx-auto max-w-6xl px-6 lg:px-10 xl:max-w-[90rem] xl:px-12"
+        className="relative z-10 mx-auto max-w-6xl px-6 lg:px-10 xl:max-w-[90rem] xl:px-12"
       >
         <div className="grid gap-12 md:grid-cols-3 md:gap-8">
-          <motion.div variants={itemVariants}>
-            <a href="#" className="flex items-center">
+          <motion.div variants={itemVariants} className="md:text-left">
+            <a href="#" className="flex items-center md:justify-start justify-center">
               <Image
                 src="/images/logo.png"
                 alt="Fersion Tech"
@@ -51,16 +77,16 @@ export default function Footer() {
                 className="h-auto w-auto brightness-0 invert sm:w-[120px] lg:w-[140px]"
               />
             </a>
-            <p className="mt-3 max-w-xs font-body text-sm leading-relaxed text-white/40">
+            <p className="mt-3 max-w-xs font-body text-sm leading-relaxed text-white/40 text-center md:text-left">
               {t("footer.desc")}
             </p>
           </motion.div>
 
-          <motion.div variants={itemVariants}>
+          <motion.div variants={itemVariants} className="text-center">
             <h4 className="mb-4 font-body text-xs font-semibold uppercase tracking-[0.15em] text-white/60">
               {t("footer.nav")}
             </h4>
-            <ul className="flex flex-col gap-2.5">
+            <ul className="flex flex-col items-center gap-2.5">
               {QUICK_LINKS.map((link) => (
                 <li key={link.key}>
                   <motion.a
@@ -77,11 +103,11 @@ export default function Footer() {
             </ul>
           </motion.div>
 
-          <motion.div variants={itemVariants}>
-            <h4 className="mb-4 font-body text-xs font-semibold uppercase tracking-[0.15em] text-white/60">
+          <motion.div variants={itemVariants} className="md:text-right">
+            <h4 className="mb-4 font-body text-xs font-semibold uppercase tracking-[0.15em] text-white/60 md:text-right text-center">
               {t("footer.follow")}
             </h4>
-            <div className="flex gap-3">
+            <div className="flex gap-3 md:justify-end justify-center">
               <motion.a
                 href={INSTAGRAM_LINK}
                 target="_blank"

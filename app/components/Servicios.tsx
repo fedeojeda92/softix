@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Globe, Workflow, Camera, TrendingUp, Sparkles } from "lucide-react";
+import { Globe, Workflow, Camera, TrendingUp } from "lucide-react";
 import { useLang } from "../lib/LanguageContext";
 
 const SERVICES = [
@@ -10,43 +10,34 @@ const SERVICES = [
     icon: Globe,
     titleKey: "services.s1.title",
     descKey: "services.s1.desc",
-    span: "col-span-1 row-span-2",
-    iconBg: "bg-forest/10",
     iconColor: "text-forest",
   },
   {
     icon: Workflow,
     titleKey: "services.s2.title",
     descKey: "services.s2.desc",
-    span: "col-span-1 row-span-1",
-    iconBg: "bg-bronze/10",
     iconColor: "text-bronze",
   },
   {
     icon: Camera,
     titleKey: "services.s3.title",
     descKey: "services.s3.desc",
-    span: "col-span-1 row-span-1",
-    iconBg: "bg-forest/10",
     iconColor: "text-forest",
   },
   {
     icon: TrendingUp,
     titleKey: "services.s4.title",
     descKey: "services.s4.desc",
-    span: "col-span-1 row-span-1",
-    iconBg: "bg-bronze/10",
     iconColor: "text-bronze",
   },
-  {
-    icon: Sparkles,
-    titleKey: "services.s5.title",
-    descKey: "services.s5.desc",
-    badgeKey: "services.s5.badge",
-    span: "col-span-1 row-span-1",
-    iconBg: "bg-forest/10",
-    iconColor: "text-forest",
-  },
+];
+
+const FLOATING_DOTS = [
+  { x: "8%", y: "15%", size: 4, color: "bg-forest/25", delay: 0, duration: 7 },
+  { x: "92%", y: "25%", size: 3, color: "bg-bronze/20", delay: 1.2, duration: 6 },
+  { x: "80%", y: "75%", size: 5, color: "bg-forest/15", delay: 0.5, duration: 8 },
+  { x: "12%", y: "85%", size: 3, color: "bg-bronze/25", delay: 2, duration: 5 },
+  { x: "45%", y: "5%", size: 2, color: "bg-forest/20", delay: 1.8, duration: 7 },
 ];
 
 function ServiceCard({
@@ -60,55 +51,44 @@ function ServiceCard({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
+      initial={{ opacity: 0, y: 40, scale: 0.92 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: "-40px" }}
       transition={{
         delay: index * 0.1,
         duration: 0.6,
-        ease: [0.25, 0.46, 0.45, 0.94],
+        ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
       }}
-      whileHover={{ y: -6, scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      className={`group relative overflow-hidden rounded-2xl border border-line/50 bg-bg p-6 transition-all duration-500 hover:border-forest/30 hover:shadow-2xl hover:shadow-forest/5 sm:p-8 ${service.span}`}
+      whileHover={{ y: -4, borderColor: "rgba(255,255,255,0.2)" }}
+      className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl transition-all duration-500 hover:shadow-2xl sm:p-6"
     >
-      {/* Background gradient on hover */}
-      <div className="absolute inset-0 bg-gradient-to-br from-forest/0 via-transparent to-bronze/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+      {/* Shimmer on hover */}
+      <div className="pointer-events-none absolute inset-0 -translate-x-full -skew-x-12 bg-gradient-to-r from-transparent via-white/5 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
 
-      {/* Icon */}
-      <div className="relative mb-5">
+      {/* Corner glow */}
+      <div className="pointer-events-none absolute -bottom-6 -right-6 h-24 w-24 rounded-full bg-forest/0 opacity-0 blur-2xl transition-all duration-700 group-hover:bg-forest/10 group-hover:opacity-100" />
+
+      <div className="relative flex flex-col gap-3">
+        {/* Icon */}
         <motion.div
-          whileHover={{ rotate: 5, scale: 1.1 }}
+          whileHover={{ rotate: 8, scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           transition={{ type: "spring", stiffness: 400, damping: 15 }}
-          className={`flex h-14 w-14 items-center justify-center rounded-2xl ${service.iconBg} ${service.iconColor} transition-all duration-300 group-hover:shadow-lg`}
+          className={`flex h-10 w-10 items-center justify-center rounded-xl bg-white/8 ${service.iconColor} transition-all duration-300 group-hover:bg-white/12 sm:h-12 sm:w-12`}
         >
-          <service.icon className="h-6 w-6" strokeWidth={1.5} />
+          <service.icon className="h-5 w-5" strokeWidth={1.5} />
         </motion.div>
-      </div>
 
-      {/* Title */}
-      <div className="relative mb-3 flex items-center gap-2.5">
-        <h3 className="font-display text-xl font-semibold text-ink transition-colors duration-300 group-hover:text-forest">
+        {/* Title */}
+        <h3 className="font-display text-base font-semibold text-white transition-colors duration-300 group-hover:text-forest sm:text-lg">
           {t(service.titleKey)}
         </h3>
-        {service.badgeKey && (
-          <motion.span
-            whileHover={{ scale: 1.05 }}
-            className="rounded-full bg-forest/10 px-2.5 py-0.5 font-body text-[11px] font-medium text-forest"
-          >
-            {t(service.badgeKey)}
-          </motion.span>
-        )}
+
+        {/* Description */}
+        <p className="font-body text-sm leading-relaxed text-white/55 transition-colors duration-300 group-hover:text-white/70">
+          {t(service.descKey)}
+        </p>
       </div>
-
-      {/* Description */}
-      <p className="relative font-body text-sm leading-relaxed text-ink/60 transition-colors duration-300 group-hover:text-ink/70">
-        {t(service.descKey)}
-      </p>
-
-      {/* Decorative corner */}
-      <div className="absolute -bottom-2 -right-2 h-24 w-24 rounded-full bg-forest/5 opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:-bottom-4 group-hover:-right-4" />
     </motion.div>
   );
 }
@@ -122,7 +102,7 @@ export default function Servicios() {
     offset: ["start end", "end start"],
   });
 
-  const decorY = useTransform(scrollYProgress, [0, 1], [40, -40]);
+  const decorY = useTransform(scrollYProgress, [0, 1], [30, -30]);
 
   const titleWords = t("services.title").split(" ");
 
@@ -130,32 +110,54 @@ export default function Servicios() {
     <section
       ref={sectionRef}
       id="servicios"
-      className="relative overflow-hidden bg-bg-dark py-14 md:py-20"
+      className="relative overflow-hidden py-12 sm:py-16 md:py-20"
     >
-      {/* Decorative elements */}
+      {/* Background */}
+      <div className="absolute inset-0 bg-[#1a1715]" />
+
+      {/* Decorative blurs */}
       <motion.div
         style={{ y: decorY }}
-        className="absolute left-[5%] top-[10%] h-72 w-72 rounded-full bg-forest/5 blur-3xl"
+        className="absolute left-[5%] top-[10%] h-64 w-64 rounded-full bg-forest/5 blur-3xl"
       />
       <motion.div
         style={{ y: decorY }}
-        className="absolute bottom-[15%] right-[10%] h-56 w-56 rounded-full bg-bronze/5 blur-3xl"
+        className="absolute bottom-[10%] right-[10%] h-48 w-48 rounded-full bg-bronze/5 blur-3xl"
       />
 
-      <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-10">
-        {/* Header */}
-        <div className="mb-12 md:mb-16">
+      {/* Floating dots */}
+      {FLOATING_DOTS.map((dot, i) => (
+        <motion.div
+          key={i}
+          className={`absolute rounded-full ${dot.color}`}
+          style={{ left: dot.x, top: dot.y, width: dot.size, height: dot.size }}
+          animate={{
+            y: [0, -10, 0],
+            opacity: [0.3, 0.7, 0.3],
+          }}
+          transition={{
+            duration: dot.duration,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: dot.delay,
+          }}
+        />
+      ))}
+
+      <div className="relative z-10 mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        {/* Header - centered */}
+        <div className="mb-8 text-center sm:mb-10 md:mb-12">
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 20, scale: 0.9 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="mb-4 font-body text-xs font-semibold uppercase tracking-[0.2em] text-bronze"
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="mb-4 inline-block rounded-full border border-forest/20 bg-forest/10 px-5 py-2 font-body text-xs font-semibold uppercase tracking-[0.2em] text-forest backdrop-blur-sm"
           >
             {t("services.badge")}
           </motion.p>
 
-          <h2 className="max-w-3xl font-display text-3xl font-semibold leading-tight text-bg md:text-[2.75rem]">
+          <h2 className="mx-auto max-w-4xl font-display text-2xl font-semibold leading-tight text-white sm:text-3xl md:text-[2.5rem]">
             {titleWords.map((word, i) => (
               <motion.span
                 key={i}
@@ -163,7 +165,7 @@ export default function Servicios() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{
-                  delay: i * 0.05,
+                  delay: 0.2 + i * 0.05,
                   duration: 0.5,
                   ease: "easeOut",
                 }}
@@ -175,8 +177,8 @@ export default function Servicios() {
           </h2>
         </div>
 
-        {/* Bento Grid */}
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-3 md:grid-rows-2">
+        {/* Grid 2x2 - simétrico */}
+        <div className="mx-auto grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
           {SERVICES.map((service, i) => (
             <ServiceCard key={service.titleKey} service={service} index={i} />
           ))}

@@ -13,7 +13,7 @@ function AnimatedNumber({ value, suffix = "" }: { value: number; suffix?: string
   return (
     <motion.span
       ref={ref}
-      className="font-display text-4xl font-bold text-forest md:text-5xl"
+      className="font-display text-3xl font-bold text-forest sm:text-4xl md:text-5xl"
     >
       {isInView ? (
         <motion.span
@@ -42,6 +42,15 @@ const SKILLS = [
   { icon: Brain, key: "about.skill3" },
 ];
 
+const FLOATING_DOTS = [
+  { x: "10%", y: "20%", size: 4, color: "bg-forest/30", delay: 0, duration: 6 },
+  { x: "85%", y: "15%", size: 3, color: "bg-bronze/25", delay: 1, duration: 7 },
+  { x: "75%", y: "70%", size: 5, color: "bg-forest/20", delay: 2, duration: 8 },
+  { x: "15%", y: "80%", size: 3, color: "bg-bronze/30", delay: 0.5, duration: 5 },
+  { x: "50%", y: "10%", size: 2, color: "bg-forest/25", delay: 1.5, duration: 6 },
+  { x: "90%", y: "50%", size: 4, color: "bg-bronze/20", delay: 3, duration: 7 },
+];
+
 export default function SobreNosotros() {
   const { t } = useLang();
   const sectionRef = useRef<HTMLElement>(null);
@@ -51,17 +60,32 @@ export default function SobreNosotros() {
     offset: ["start end", "end start"],
   });
 
-  const imageY = useTransform(scrollYProgress, [0, 1], [40, -40]);
-  const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.08, 1, 1.04]);
-  const decorY = useTransform(scrollYProgress, [0, 1], [-20, 20]);
-  const decorY2 = useTransform(scrollYProgress, [0, 1], [15, -15]);
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
 
-  const textVariants = {
-    hidden: { opacity: 0, y: 30 },
+  const cardVariants = {
+    hidden: { opacity: 0, y: 40, scale: 0.92 },
     visible: (i: number) => ({
       opacity: 1,
       y: 0,
-      transition: { delay: i * 0.15, duration: 0.6, ease: "easeOut" as const },
+      scale: 1,
+      transition: {
+        delay: i * 0.2,
+        duration: 0.7,
+        ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
+      },
+    }),
+  };
+
+  const textLineVariants = {
+    hidden: { opacity: 0, y: 15 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: 0.3 + i * 0.12,
+        duration: 0.5,
+        ease: "easeOut" as const,
+      },
     }),
   };
 
@@ -69,179 +93,177 @@ export default function SobreNosotros() {
     <section
       ref={sectionRef}
       id="sobre-nosotros"
-      className="relative overflow-hidden bg-bg py-14 md:py-20"
+      className="relative overflow-hidden py-16 sm:py-20 md:py-28"
     >
-      {/* Decorative floating elements */}
-      <motion.div
-        style={{ y: decorY }}
-        className="absolute right-[10%] top-[15%] h-64 w-64 rounded-full bg-forest/5 blur-3xl"
-      />
-      <motion.div
-        style={{ y: decorY2 }}
-        className="absolute bottom-[10%] left-[5%] h-48 w-48 rounded-full bg-bronze/5 blur-3xl"
-      />
-      <motion.div
-        style={{ y: decorY }}
-        className="absolute left-[40%] top-[60%] h-32 w-32 rounded-full bg-forest/3 blur-2xl"
-      />
+      {/* Background Image */}
+      <motion.div style={{ y: bgY }} className="pointer-events-none absolute inset-0 -top-20 -bottom-20">
+        <Image
+          src="/images/tech-bg.jpg"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover"
+          priority
+        />
+      </motion.div>
 
-      <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-10">
-        <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-20">
-          {/* Image Column - Left */}
-          <motion.div
-            style={{ y: imageY }}
-            className="relative order-2 lg:order-1"
-          >
-            {/* Main image */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="relative aspect-[4/5] overflow-hidden rounded-3xl"
-            >
-              <motion.div style={{ scale: imageScale }} className="absolute inset-0">
-                <Image
-                  src="/images/nos.png"
-                  alt="Sobre nosotros"
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 45vw"
-                  className="object-cover"
-                  priority
-                />
-              </motion.div>
-              {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-bg-dark/30 via-transparent to-transparent" />
+      {/* Dark Overlay with Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#1a1715]/85 via-[#2D2926]/75 to-[#1a1715]/90" />
 
-              {/* Animated border glow */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 1.2, duration: 0.8 }}
-                className="absolute inset-0 rounded-3xl ring-1 ring-inset ring-forest/10"
-              />
-            </motion.div>
+      {/* Floating Decorative Dots */}
+      {FLOATING_DOTS.map((dot, i) => (
+        <motion.div
+          key={i}
+          className={`absolute rounded-full ${dot.color}`}
+          style={{ left: dot.x, top: dot.y, width: dot.size, height: dot.size }}
+          animate={{
+            y: [0, -12, 0],
+            opacity: [0.3, 0.7, 0.3],
+          }}
+          transition={{
+            duration: dot.duration,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: dot.delay,
+          }}
+        />
+      ))}
 
-            {/* Floating stat card */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.7, x: 20, rotate: -3 }}
-              whileInView={{ opacity: 1, scale: 1, x: 0, rotate: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.6, duration: 0.6, type: "spring", stiffness: 200, damping: 15 }}
-              className="absolute -bottom-6 -right-4 rounded-2xl border border-line bg-bg p-5 shadow-xl md:-right-8 md:p-6"
-            >
-              <div className="flex items-center gap-3">
-                <motion.div
-                  animate={{ rotate: [0, 5, -5, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="flex h-12 w-12 items-center justify-center rounded-xl bg-forest/10"
-                >
-                  <Brain className="h-6 w-6 text-forest" />
-                </motion.div>
-                <div>
-                  <p className="font-display text-2xl font-bold text-ink">AI</p>
-                  <p className="font-body text-xs text-ink/50">Integrada</p>
-                </div>
-              </div>
-            </motion.div>
+      {/* Content */}
+      <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center px-4 sm:px-6 lg:px-8">
+        {/* Badge */}
+        <motion.p
+          initial={{ opacity: 0, y: 20, scale: 0.9 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="mb-8 rounded-full border border-forest/20 bg-forest/10 px-5 py-2 font-body text-xs font-semibold uppercase tracking-[0.2em] text-forest backdrop-blur-sm sm:mb-10"
+        >
+          {t("about.badge")}
+        </motion.p>
 
-            {/* Floating decorative dot */}
-            <motion.div
-              animate={{ y: [0, -8, 0], opacity: [0.4, 0.8, 0.4] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -left-4 top-1/4 h-3 w-3 rounded-full bg-forest/40"
-            />
-            <motion.div
-              animate={{ y: [0, 6, 0], opacity: [0.3, 0.6, 0.3] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              className="absolute -right-2 top-1/3 h-2 w-2 rounded-full bg-bronze/40"
-            />
-          </motion.div>
+        {/* Main Glass Card - Text */}
+        <motion.div
+          custom={0}
+          variants={cardVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          whileHover={{ y: -4, borderColor: "rgba(255,255,255,0.2)" }}
+          className="group relative w-full overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl transition-all duration-500 hover:shadow-2xl hover:shadow-forest/5 sm:rounded-3xl sm:p-8 md:p-10"
+        >
+          {/* Shimmer Effect on Hover */}
+          <div className="pointer-events-none absolute inset-0 -translate-x-full -skew-x-12 bg-gradient-to-r from-transparent via-white/5 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
 
-          {/* Content Column - Right */}
-          <div className="order-1 lg:order-2">
+          {/* Glow Effect */}
+          <div className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 sm:rounded-3xl" style={{ background: "radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(194,119,94,0.06), transparent 40%)" }} />
+
+          {/* Text Content */}
+          <div className="relative space-y-4 text-center sm:space-y-5">
             <motion.p
               custom={0}
-              variants={textVariants}
+              variants={textLineVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="mb-4 font-body text-xs font-semibold uppercase tracking-[0.2em] text-bronze"
-            >
-              {t("about.badge")}
-            </motion.p>
-
-            <motion.div
-              custom={1}
-              variants={textVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="space-y-4 font-body text-base leading-relaxed text-ink/70"
+              className="font-body text-sm leading-relaxed text-white/85 sm:text-base md:text-lg"
               style={{ lineHeight: 1.8 }}
             >
-              <p>{t("about.p1")}</p>
-              <p>{t("about.p2")}</p>
-            </motion.div>
-
-            {/* Skills */}
-            <motion.div
-              custom={2}
-              variants={textVariants}
+              {t("about.p1")}
+            </motion.p>
+            <motion.p
+              custom={1}
+              variants={textLineVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap"
+              className="font-body text-sm leading-relaxed text-white/85 sm:text-base md:text-lg"
+              style={{ lineHeight: 1.8 }}
             >
-              {SKILLS.map((skill, i) => (
-                <motion.div
-                  key={skill.key}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.3 + i * 0.1, duration: 0.5, type: "spring", stiffness: 300, damping: 20 }}
-                  whileHover={{ scale: 1.05, y: -3 }}
-                  className="group flex items-center gap-3 rounded-xl border border-line bg-bg px-5 py-3.5 transition-colors duration-300 hover:border-forest/30 hover:bg-forest/5"
-                >
-                  <motion.span
-                    whileHover={{ rotate: 10, scale: 1.15 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-forest/10 text-forest transition-colors duration-300 group-hover:bg-forest/20"
-                  >
-                    <skill.icon className="h-5 w-5" strokeWidth={1.5} />
-                  </motion.span>
-                  <span className="font-body text-sm font-medium text-ink/80">
-                    {t(skill.key)}
-                  </span>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            {/* Stats */}
-            <motion.div
-              custom={3}
-              variants={textVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              className="mt-10 grid grid-cols-3 gap-6 border-t border-line pt-8"
-            >
-              <div>
-                <AnimatedNumber value={4} suffix="+" />
-                <p className="mt-1 font-body text-xs text-ink/50">Años de experiencia</p>
-              </div>
-              <div>
-                <AnimatedNumber value={50} suffix="+" />
-                <p className="mt-1 font-body text-xs text-ink/50">Proyectos entregados</p>
-              </div>
-              <div>
-                <AnimatedNumber value={100} suffix="%" />
-                <p className="mt-1 font-body text-xs text-ink/50">Clientes satisfechos</p>
-              </div>
-            </motion.div>
+              {t("about.p2")}
+            </motion.p>
           </div>
-        </div>
+        </motion.div>
+
+        {/* Skills Chips - always in a row */}
+        <motion.div
+          custom={1}
+          variants={cardVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          className="mt-6 flex w-full justify-center gap-2 sm:mt-8 sm:gap-3"
+        >
+          {SKILLS.map((skill, i) => (
+            <motion.div
+              key={skill.key}
+              initial={{ opacity: 0, x: -20, scale: 0.9 }}
+              whileInView={{ opacity: 1, x: 0, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{
+                delay: 0.4 + i * 0.15,
+                duration: 0.5,
+                type: "spring",
+                stiffness: 200,
+                damping: 15,
+              }}
+              whileHover={{ scale: 1.05, y: -3 }}
+              whileTap={{ scale: 0.95 }}
+              className="group flex flex-1 items-center justify-center gap-2 rounded-xl border border-white/12 bg-white/8 px-3 py-3 backdrop-blur-lg transition-all duration-300 hover:border-forest/40 hover:bg-white/12 hover:shadow-lg hover:shadow-forest/10 sm:gap-3 sm:rounded-2xl sm:px-5 sm:py-3.5"
+            >
+              <motion.span
+                whileHover={{ rotate: 10, scale: 1.15 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-forest/15 text-forest transition-colors duration-300 group-hover:bg-forest/25 sm:h-10 sm:w-10 sm:rounded-xl"
+              >
+                <skill.icon className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={1.5} />
+              </motion.span>
+              <span className="truncate font-body text-xs font-medium text-white/80 sm:text-sm">
+                {t(skill.key)}
+              </span>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Stats Glass Card */}
+        <motion.div
+          custom={2}
+          variants={cardVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          whileHover={{ y: -4, borderColor: "rgba(255,255,255,0.2)" }}
+          className="group relative mt-6 w-full max-w-2xl overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl transition-all duration-500 hover:shadow-2xl hover:shadow-forest/5 sm:mt-8 sm:rounded-3xl sm:p-8 md:p-10"
+        >
+          {/* Shimmer Effect on Hover */}
+          <div className="pointer-events-none absolute inset-0 -translate-x-full -skew-x-12 bg-gradient-to-r from-transparent via-white/5 to-transparent transition-transform duration-1000 group-hover:translate-x-full" />
+
+          {/* Stats Row */}
+          <div className="relative flex items-center justify-between">
+            {/* Stat 1 */}
+            <div className="text-center">
+              <AnimatedNumber value={4} suffix="+" />
+              <p className="mt-1 font-body text-[10px] text-white/50 sm:mt-2 sm:text-xs">Años de experiencia</p>
+            </div>
+
+            {/* Divider */}
+            <div className="flex h-12 items-center">
+              <motion.div
+                initial={{ height: 0 }}
+                whileInView={{ height: "100%" }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
+                className="w-px bg-gradient-to-b from-transparent via-white/20 to-transparent"
+              />
+            </div>
+
+            {/* Stat 2 */}
+            <div className="text-center">
+              <AnimatedNumber value={100} suffix="%" />
+              <p className="mt-1 font-body text-[10px] text-white/50 sm:mt-2 sm:text-xs">Clientes satisfechos</p>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

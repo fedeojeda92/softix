@@ -19,6 +19,14 @@ function usePrefersReducedMotion() {
   return reduced;
 }
 
+const FLOATING_DOTS = [
+  { x: "8%", y: "18%", size: 3, color: "bg-forest/20", delay: 0, duration: 7 },
+  { x: "92%", y: "12%", size: 2, color: "bg-bronze/15", delay: 1.5, duration: 6 },
+  { x: "85%", y: "78%", size: 4, color: "bg-forest/15", delay: 0.8, duration: 8 },
+  { x: "10%", y: "82%", size: 3, color: "bg-bronze/20", delay: 2, duration: 5 },
+  { x: "50%", y: "5%", size: 2, color: "bg-white/10", delay: 1, duration: 7 },
+];
+
 export default function TourVirtual360() {
   const [showHint, setShowHint] = useState(true);
   const [activeScene, setActiveScene] = useState(tourConfig.firstScene);
@@ -52,24 +60,48 @@ export default function TourVirtual360() {
   return (
     <section
       id="tour-360"
-      className="relative bg-bg-dark"
-      style={{ minHeight: "100dvh" }}
+      className="relative flex h-dvh max-h-dvh flex-col overflow-hidden bg-[#1a1715]"
     >
-      <div className="py-6 md:py-8">
+      {/* Floating dots */}
+      {FLOATING_DOTS.map((dot, i) => (
+        <motion.div
+          key={i}
+          className={`absolute z-10 rounded-full ${dot.color}`}
+          style={{ left: dot.x, top: dot.y, width: dot.size, height: dot.size }}
+          animate={{
+            y: [0, -8, 0],
+            opacity: [0.3, 0.7, 0.3],
+          }}
+          transition={{
+            duration: dot.duration,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: dot.delay,
+          }}
+        />
+      ))}
+
+      <div className="relative z-20 flex flex-1 flex-col py-6 sm:py-8 md:py-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-10 mb-4 text-center md:mb-5"
+          className="mx-auto max-w-6xl px-5 sm:px-6 lg:px-10 mb-6 text-center md:mb-8"
         >
-          <p className="mb-2 font-body text-xs font-semibold uppercase tracking-[0.2em] text-bronze md:mb-3">
+          <motion.span
+            initial={{ opacity: 0, y: 15, scale: 0.9 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="mb-4 inline-block rounded-full border border-forest/20 bg-forest/10 px-5 py-2 font-body text-xs font-semibold uppercase tracking-[0.2em] text-forest backdrop-blur-sm sm:text-sm"
+          >
             {t("tour.badge")}
-          </p>
+          </motion.span>
           <h2 className="mx-auto max-w-2xl font-display text-xl font-semibold leading-tight text-white sm:text-2xl md:text-[2.5rem]">
             {t("tour.title")}
           </h2>
-          <p className="mx-auto mt-2 max-w-xl font-body text-sm leading-relaxed text-white/60 sm:text-base md:mt-3">
+          <p className="mx-auto mt-3 max-w-xl font-body text-sm leading-relaxed text-white/55 sm:text-base md:mt-4">
             {t("tour.description")}
           </p>
         </motion.div>
@@ -79,14 +111,9 @@ export default function TourVirtual360() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.7, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="relative"
+          className="relative flex min-h-0 flex-1 flex-col"
         >
-          <div
-            className="relative w-full overflow-hidden h-[42vh] sm:h-[48vh] md:h-[52vh] lg:h-[58vh]"
-            style={{
-              borderRadius: "0",
-            }}
-          >
+          <div className="relative min-h-0 w-full flex-1 overflow-hidden">
             <PanoramaViewer
               tourConfig={tourConfig}
               autoRotate={!reduced}
@@ -107,7 +134,7 @@ export default function TourVirtual360() {
               <motion.div
                 animate={{ y: [0, -6, 0] }}
                 transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                className="flex items-center gap-2 rounded-full bg-bg-dark/80 px-4 py-2 backdrop-blur-sm sm:px-5 sm:py-2.5"
+                className="flex items-center gap-2 rounded-full border border-white/15 bg-bg-dark/80 px-4 py-2 backdrop-blur-sm sm:px-5 sm:py-2.5"
               >
                 <svg
                   viewBox="0 0 24 24"

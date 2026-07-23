@@ -56,7 +56,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     "services.s5.badge": "Complementario",
 
     // Planes
-    "plans.badge": "Inversión",
+    "plans.badge": "Planes",
     "plans.title": "Planes",
     "plans.from": "Desde",
     "plans.consultar": "Consultar",
@@ -176,7 +176,7 @@ export const translations: Record<Lang, Record<string, string>> = {
     "services.s5.badge": "Complementary",
 
     // Planes
-    "plans.badge": "Investment",
+    "plans.badge": "Plans",
     "plans.title": "Plans",
     "plans.from": "From",
     "plans.consultar": "Inquire",
